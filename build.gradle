@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+group 'fr.redstonneur1256'
+version '1.0'
+
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.main.resources.srcDirs = ["src/"]
+sourceSets.test.java.srcDirs = []
+sourceSets.test.resources.srcDirs = []
+compileJava.options.encoding = "UTF-8"
+compileJava.sourceCompatibility = 1.8
+compileJava.targetCompatibility = 1.8
+
+jar.archiveFileName = "Particles.jar"
+jar.manifest.attributes.put("Main-Class", "fr.redstonneur1256.Main")
+
+shadowJar.archiveFileName = jar.archiveFileName
+
+
+
+ext.redUtilitiesVersion = "1.2"
+ext.remoteDownload = { String url, String name ->
+    File file = new File("$buildDir/lib/${name}");
+    if (!file.exists()) {
+        file.parentFile.mkdirs()
+        println "${name} not found, downloading it from ${url}, please wait..."
+        new URL(url).withInputStream { connectionInput ->
+            file.withOutputStream { fileOutput ->
+                fileOutput << connectionInput
+            }
+        }
+        println "${name} downloaded sucessfully"
+    }
+    files(file.absolutePath)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.formdev:flatlaf:0.20'
+    compile 'net.sf.jopt-simple:jopt-simple:4.7'
+    compile remoteDownload("https://github.com/Redstonneur1256/RedUtilities/releases/download/${redUtilitiesVersion}/RedUtilities.jar", "RedUtilities.jar")
+}
