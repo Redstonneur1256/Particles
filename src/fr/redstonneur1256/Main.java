@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import fr.redstonneur1256.frame.ParticleFrame;
 import fr.redstonneur1256.frame.SettingsFrame;
 import fr.redstonneur1256.particles.ParticlesPanel;
+import fr.redstonneur1256.redutilities.Utils;
 import fr.redstonneur1256.redutilities.io.JDownload;
 import fr.redstonneur1256.utils.ParticleUtils;
 import joptsimple.*;
@@ -25,7 +26,7 @@ public class Main {
             parser.accepts("?");
             OptionSpec<Integer> width = parser.accepts("width").withRequiredArg().ofType(Integer.class).defaultsTo(720);
             OptionSpec<Integer> height = parser.accepts("height").withRequiredArg().ofType(Integer.class).defaultsTo(480);
-            OptionSpec<Integer> frameRate = parser.accepts("frameRate").withRequiredArg().ofType(Integer.class).defaultsTo(30);
+            OptionSpec<Integer> frameRate = parser.accepts("fps").withRequiredArg().ofType(Integer.class).defaultsTo(30);
             OptionSpec<Integer> particleAmount = parser.accepts("amount").withRequiredArg().ofType(Integer.class).defaultsTo(100);
             OptionSpec<Integer> distance = parser.accepts("distance").withRequiredArg().ofType(Integer.class).defaultsTo(75);
             OptionSpec<Integer> particleWidth = parser.accepts("size").withRequiredArg().ofType(Integer.class).defaultsTo(10);
@@ -54,12 +55,12 @@ public class Main {
                     download -> new JDownload.ListenerAdapter() {
                         @Override
                         public void speedChanged(long speed) {
-                            System.out.print(download.createBar(50, "-", " ") + "\r");
+                            System.out.print("[" + download.createBar(50, "-", " ") + "] " + Utils.sizeFormat(speed, "B/s") + "\r");
                         }
 
                         @Override
                         public void downloadComplete() {
-                            System.out.println(download.createBar(50, "-", " "));
+                            System.out.println("[" + download.createBar(50, "-", " ") + "]");
                         }
                     }) : null;
 
@@ -78,7 +79,7 @@ public class Main {
             panel.setParticleColor(parseColor(ballColor.values(options)));
             panel.setLineColor(parseColor(lineColor.values(options)));
 
-            panel.setUseBackgroundImage(options.has("debug"));
+            panel.setUseBackgroundImage(options.has("useback"));
             panel.setBackgroundImage(background);
 
             panel.setLineDistance(distance.value(options));
