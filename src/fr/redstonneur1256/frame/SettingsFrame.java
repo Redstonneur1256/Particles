@@ -182,8 +182,8 @@ public class SettingsFrame extends JFrame {
 
     private void appendColor(StringBuilder builder, String name, Color color) {
         builder.append(" ").append(name).append(" ")
-                .append(color.getRed()).append(" ")
-                .append(color.getGreen()).append(" ")
+                .append(color.getRed()).append(",")
+                .append(color.getGreen()).append(",")
                 .append(color.getBlue());
     }
 
